@@ -1,6 +1,7 @@
 import { filesInDir } from "./dirs.js";
 import logger from "./logger.js";
 import { AuthGuard } from "./guard.js";
+import pjson from "../../package.json" with { type: 'json' };
 
 async function loadFilesRecursively(basePath, routeBase, router) {
   const items = await filesInDir(basePath);
@@ -23,6 +24,7 @@ async function loadFilesRecursively(basePath, routeBase, router) {
           if (!await AuthGuard(req.headers.authorization, role)) {
             return res.status(403).json({ status: false, message: 'Forbidden: Authentication required' });
           }
+          res.setHeader('X-Powered-By', `${pjson.name}/${pjson.version}`);
           return routeModule[method](req, res);
         });
       }
