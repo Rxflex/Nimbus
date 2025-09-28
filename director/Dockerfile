@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y dumb-init && rm -rf /var/lib/apt/lists/
 RUN addgroup --system nodejs && adduser --system --ingroup nodejs nestjs
 
 # Copy package files
-COPY bun.lockb package.json ./
+COPY bun.lock package.json ./
 
 # Install only production dependencies
 RUN bun install --production --frozen-lockfile
