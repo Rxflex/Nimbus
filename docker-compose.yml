@@ -1,0 +1,44 @@
+version: '3.8'
+
+# Environment variables
+x-common-variables: &common-variables
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: rxflex/nimbus
+
+services:
+  mongo:
+    image: mongo:6.0
+    container_name: nimbus-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-pass}
+    volumes:
+      - mongo_data:/data/db
+
+  director:
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_PREFIX:-rxflex/nimbus}-director:${TAG:-latest}
+    container_name: nimbus-director
+    ports:
+      - "${DIRECTOR_PORT:-3000}:3000"
+    environment:
+      DATABASE_URL: mongodb://${MONGO_ROOT_USERNAME:-admin}:${MONGO_ROOT_PASSWORD:-pass}@mongo:27017/${MONGO_DATABASE:-nimbus}
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret}
+    depends_on:
+      - mongo
+
+  admin-panel:
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_PREFIX:-rxflex/nimbus}-admin-panel:${TAG:-latest}
+    container_name: nimbus-admin-panel
+    ports:
+      - "${ADMIN_PANEL_PORT:-5173}:80"
+    environment:
+      API_URL: ${API_URL:-http://localhost:3000}
+    depends_on:
+      - director
+
+
+volumes:
+  mongo_data:

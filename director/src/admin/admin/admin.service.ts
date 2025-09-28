@@ -16,98 +16,110 @@ export class AdminService {
   ) {}
 
   // Agent CRUD
-  async createAgent(createAgentDto: any): Promise<Agent> {
-    const createdAgent = new this.agentModel(createAgentDto);
-    return await this.agentModel.create(createdAgent);
+  async createAgent(userId: string, createAgentDto: any): Promise<Agent> {
+    const agentData = { ...createAgentDto, owner: userId };
+    const agent = new this.agentModel(agentData);
+    return agent.save();
   }
 
-  async findAllAgents(): Promise<Agent[]> {
-    return this.agentModel.find().exec();
+  async findAllAgents(userId: string): Promise<Agent[]> {
+    return this.agentModel.find({ owner: userId }).exec();
   }
 
-  async findAgent(id: string): Promise<Agent | null> {
-    return this.agentModel.findById(id).exec();
+  async findAgent(id: string, userId: string): Promise<Agent | null> {
+    return this.agentModel.findOne({ _id: id, owner: userId }).exec();
   }
 
-  async updateAgent(id: string, updateAgentDto: any): Promise<Agent | null> {
-    return this.agentModel
-      .findByIdAndUpdate(id, updateAgentDto, { new: true })
-      .exec();
+  async updateAgent(id: string, updateAgentDto: any, userId: string): Promise<Agent | null> {
+    return this.agentModel.findOneAndUpdate(
+      { _id: id, owner: userId },
+      { ...updateAgentDto },
+      { new: true }
+    ).exec();
   }
 
-  async removeAgent(id: string): Promise<Agent | null> {
-    return this.agentModel.findByIdAndDelete(id).exec();
+  async removeAgent(id: string, userId: string): Promise<Agent | null> {
+    return this.agentModel.findOneAndDelete({ _id: id, owner: userId }).exec();
   }
 
   // Rule CRUD
-  async createRule(createRuleDto: any): Promise<Rule> {
-    const createdRule = new this.ruleModel(createRuleDto);
-    return await this.ruleModel.create(createdRule);
+  async createRule(userId: string, createRuleDto: any): Promise<Rule> {
+    const ruleData = { ...createRuleDto, owner: userId };
+    const rule = new this.ruleModel(ruleData);
+    return rule.save();
   }
 
-  async findAllRules(): Promise<Rule[]> {
-    return this.ruleModel.find().exec();
+  async findAllRules(userId: string): Promise<Rule[]> {
+    return this.ruleModel.find({ owner: userId }).exec();
   }
 
-  async findRule(id: string): Promise<Rule | null> {
-    return this.ruleModel.findById(id).exec();
+  async findRule(id: string, userId: string): Promise<Rule | null> {
+    return this.ruleModel.findOne({ _id: id, owner: userId }).exec();
   }
 
-  async updateRule(id: string, updateRuleDto: any): Promise<Rule | null> {
-    return this.ruleModel
-      .findByIdAndUpdate(id, updateRuleDto, { new: true })
-      .exec();
+  async updateRule(id: string, updateRuleDto: any, userId: string): Promise<Rule | null> {
+    return this.ruleModel.findOneAndUpdate(
+      { _id: id, owner: userId },
+      { ...updateRuleDto },
+      { new: true }
+    ).exec();
   }
 
-  async removeRule(id: string): Promise<Rule | null> {
-    return this.ruleModel.findByIdAndDelete(id).exec();
+  async removeRule(id: string, userId: string): Promise<Rule | null> {
+    return this.ruleModel.findOneAndDelete({ _id: id, owner: userId }).exec();
   }
 
   // Route CRUD
-  async createRoute(createRouteDto: any): Promise<Route> {
-    const createdRoute = new this.routeModel(createRouteDto);
-    return await this.routeModel.create(createdRoute);
+  async createRoute(userId: string, createRouteDto: any): Promise<Route> {
+    const routeData = { ...createRouteDto, owner: userId };
+    const route = new this.routeModel(routeData);
+    return route.save();
   }
 
-  async findAllRoutes(): Promise<Route[]> {
-    return this.routeModel.find().exec();
+  async findAllRoutes(userId: string): Promise<Route[]> {
+    return this.routeModel.find({ owner: userId }).exec();
   }
 
-  async findRoute(id: string): Promise<Route | null> {
-    return this.routeModel.findById(id).exec();
+  async findRoute(id: string, userId: string): Promise<Route | null> {
+    return this.routeModel.findOne({ _id: id, owner: userId }).exec();
   }
 
-  async updateRoute(id: string, updateRouteDto: any): Promise<Route | null> {
-    return this.routeModel
-      .findByIdAndUpdate(id, updateRouteDto, { new: true })
-      .exec();
+  async updateRoute(id: string, updateRouteDto: any, userId: string): Promise<Route | null> {
+    return this.routeModel.findOneAndUpdate(
+      { _id: id, owner: userId },
+      { ...updateRouteDto },
+      { new: true }
+    ).exec();
   }
 
-  async removeRoute(id: string): Promise<Route | null> {
-    return this.routeModel.findByIdAndDelete(id).exec();
+  async removeRoute(id: string, userId: string): Promise<Route | null> {
+    return this.routeModel.findOneAndDelete({ _id: id, owner: userId }).exec();
   }
 
   // GeoDNS CRUD
-  async createGeoDns(createGeoDnsDto: any): Promise<GeoDns> {
-    const createdGeoDns = new this.geoDnsModel(createGeoDnsDto);
-    return await this.geoDnsModel.create(createdGeoDns);
+  async createGeoDns(userId: string, createGeoDnsDto: any): Promise<GeoDns> {
+    const geoDnsData = { ...createGeoDnsDto, owner: userId };
+    const geoDns = new this.geoDnsModel(geoDnsData);
+    return geoDns.save();
   }
 
-  async findAllGeoDns(): Promise<GeoDns[]> {
-    return this.geoDnsModel.find().exec();
+  async findAllGeoDns(userId: string): Promise<GeoDns[]> {
+    return this.geoDnsModel.find({ owner: userId }).exec();
   }
 
-  async findGeoDns(id: string): Promise<GeoDns | null> {
-    return this.geoDnsModel.findById(id).exec();
+  async findGeoDns(id: string, userId: string): Promise<GeoDns | null> {
+    return this.geoDnsModel.findOne({ _id: id, owner: userId }).exec();
   }
 
-  async updateGeoDns(id: string, updateGeoDnsDto: any): Promise<GeoDns | null> {
-    return this.geoDnsModel
-      .findByIdAndUpdate(id, updateGeoDnsDto, { new: true })
-      .exec();
+  async updateGeoDns(id: string, updateGeoDnsDto: any, userId: string): Promise<GeoDns | null> {
+    return this.geoDnsModel.findOneAndUpdate(
+      { _id: id, owner: userId },
+      { ...updateGeoDnsDto },
+      { new: true }
+    ).exec();
   }
 
-  async removeGeoDns(id: string): Promise<GeoDns | null> {
-    return this.geoDnsModel.findByIdAndDelete(id).exec();
+  async removeGeoDns(id: string, userId: string): Promise<GeoDns | null> {
+    return this.geoDnsModel.findOneAndDelete({ _id: id, owner: userId }).exec();
   }
 }

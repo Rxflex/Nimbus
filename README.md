@@ -13,8 +13,40 @@
 - Простое масштабирование сети агентов.
 - Перенаправление TCP/UDP трафика.
 - GeoDNS для маршрутизации по географической близости.
-- Лёгкое подключение новых агентов с помощью скрипта.
+- **Упрощённое подключение агентов** — одна команда для установки.
+- Автоматическое определение IP, портов и возможностей агента.
 - Открытый код — любой может присоединиться к разработке.
+
+### Быстрый запуск с Docker
+
+```bash
+# Клонировать репозиторий
+git clone https://github.com/Rxflex/Nimbus.git
+cd Nimbus
+
+# Настроить переменные окружения
+cp env.example .env
+# Отредактировать .env под ваши нужды
+
+# Запустить директор и админ-панель
+docker-compose up -d
+```
+
+### Быстрая установка агента
+
+```bash
+# Linux/macOS - одна команда для установки
+curl -fsSL https://raw.githubusercontent.com/Rxflex/Nimbus/main/agent/install.sh | sudo bash -s -- http://your-director-url/api/agent/YOUR_API_KEY
+
+# Windows - запустить от имени администратора
+powershell -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/Rxflex/Nimbus/main/agent/install.bat' -OutFile 'install.bat'; .\install.bat http://your-director-url/api/agent/YOUR_API_KEY"
+```
+
+Агент автоматически:
+- Определит свой IP адрес
+- Настроит все возможности (HTTP, HTTPS, TCP, UDP, DNS)
+- Установится как системный сервис
+- Начнёт получать конфигурацию от директора
 
 ### Лицензия
 Проект **запрещено** использовать в коммерческих целях.  
@@ -38,8 +70,40 @@ The repository is a **monorepo** containing:
 - Easy scaling of the agent network.
 - TCP/UDP traffic redirection.
 - GeoDNS for routing based on geographic proximity.
-- Simple onboarding of new agents via script.
+- **Simplified agent onboarding** — one command installation.
+- Automatic IP, port, and capabilities detection.
 - Open-source — anyone can contribute to development.
+
+### Quick Start with Docker
+
+```bash
+# Clone repository
+git clone https://github.com/Rxflex/Nimbus.git
+cd Nimbus
+
+# Configure environment variables
+cp env.example .env
+# Edit .env according to your needs
+
+# Start director and admin panel
+docker-compose up -d
+```
+
+### Quick Agent Installation
+
+```bash
+# Linux/macOS - one command installation
+curl -fsSL https://raw.githubusercontent.com/Rxflex/Nimbus/main/agent/install.sh | sudo bash -s -- http://your-director-url/api/agent/YOUR_API_KEY
+
+# Windows - run as administrator
+powershell -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/Rxflex/Nimbus/main/agent/install.bat' -OutFile 'install.bat'; .\install.bat http://your-director-url/api/agent/YOUR_API_KEY"
+```
+
+Agent automatically:
+- Detects its IP address
+- Configures all capabilities (HTTP, HTTPS, TCP, UDP, DNS)
+- Installs as system service
+- Starts receiving configuration from director
 
 ### License
 Commercial use of the project is **prohibited**.  
