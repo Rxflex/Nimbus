@@ -1,38 +1,36 @@
 # Build stage
-FROM node:18-alpine AS builder
+FROM oven/bun:1 AS builder
 
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
-COPY tsconfig*.json ./
+COPY bun.lockb package.json tsconfig*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN bun install --frozen-lockfile
 
 # Copy source code
 COPY src/ ./src/
 
 # Build the application
-RUN npm run build
+RUN bun run build
 
 # Production stage
-FROM node:18-alpine AS production
+FROM oven/bun:1 AS production
 
 WORKDIR /app
 
 # Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+RUN apt-get update && apt-get install -y dumb-init && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nestjs -u 1001
+RUN addgroup --system nodejs && adduser --system --ingroup nodejs nestjs
 
 # Copy package files
-COPY package*.json ./
+COPY bun.lockb package.json ./
 
 # Install only production dependencies
-RUN npm ci --only=production && npm cache clean --force
+RUN bun install --production --frozen-lockfile
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
@@ -46,10 +44,10 @@ EXPOSE 3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node dist/health-check.js || exit 1
+  CMD bun run dist/health-check.js || exit 1
 
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
 
 # Start the application
-CMD ["node", "dist/main.js"]
+CMD ["bun", "dist/main.js"]
