@@ -1,16 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '@/lib/api';
+import { apiClient } from '@/lib/api';
 
 const GEODNS_QUERY_KEY = ['geodns'];
 
 export function useGeoDns() {
   return useQuery({
     queryKey: GEODNS_QUERY_KEY,
-    queryFn: async () => {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No authentication token found');
-      return api.get('/admin/geodns', token);
-    },
+    queryFn: () => apiClient.getGeoDns(),
     refetchInterval: 30000, // Refresh every 30 seconds
   });
 }
@@ -18,11 +14,7 @@ export function useGeoDns() {
 export function useCreateGeoDns() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (newGeoDnsData) => {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No authentication token found');
-      return api.post('/admin/geodns', newGeoDnsData, token);
-    },
+    mutationFn: (newGeoDnsData) => apiClient.createGeoDns(newGeoDnsData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: GEODNS_QUERY_KEY });
     },
@@ -32,11 +24,7 @@ export function useCreateGeoDns() {
 export function useUpdateGeoDns() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, data }) => {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No authentication token found');
-      return api.put(`/admin/geodns/${id}`, data, token);
-    },
+    mutationFn: ({ id, data }) => apiClient.updateGeoDns(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: GEODNS_QUERY_KEY });
     },
@@ -46,11 +34,7 @@ export function useUpdateGeoDns() {
 export function useDeleteGeoDns() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (id) => {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No authentication token found');
-      return api.delete(`/admin/geodns/${id}`, token);
-    },
+    mutationFn: (id) => apiClient.deleteGeoDns(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: GEODNS_QUERY_KEY });
     },

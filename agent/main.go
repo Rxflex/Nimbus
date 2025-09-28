@@ -1,7 +1,7 @@
 package main
 
-import "github.com/Rxflex/Nimbus/agent/cmd"
+import "fmt"
 
 func main() {
-  cmd.Execute()
+	fmt.Println("Hello, World!")
 }
