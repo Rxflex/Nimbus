@@ -14,7 +14,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # Устанавливаем только production-зависимости (dev-зависимости не нужны для сборки if build требует dev — уберите --omit=dev)
-RUN npm ci --omit=dev --prefer-offline --no-audit --progress=false
+RUN npm ci --prefer-offline --no-audit --progress=false
 
 # Копируем остальной код и собираем
 COPY . .
