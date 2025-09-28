@@ -13,8 +13,7 @@ WORKDIR /app
 # Копируем только файлы зависимостей для кэширования npm install
 COPY package.json package-lock.json* ./
 
-# Устанавливаем только production-зависимости (dev-зависимости не нужны для сборки if build требует dev — уберите --omit=dev)
-RUN npm ci --prefer-offline --no-audit --progress=false
+RUN npm ci
 
 # Копируем остальной код и собираем
 COPY . .
