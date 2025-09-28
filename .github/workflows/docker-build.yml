@@ -125,7 +125,7 @@ jobs:
         path: agent/nimbus-agent-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.os == 'windows' && '.exe' || '' }}
 
   release:
-    needs: [build-director, build-admin-panel, build-agent-binaries]
+    needs: [build-director, build-panel, build-agent-binaries]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
