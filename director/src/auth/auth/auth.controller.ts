@@ -24,8 +24,10 @@ import {
   ApiOkResponse,
   ApiBearerAuth,
   ApiParam,
+  ApiCreatedResponse,
 } from '@nestjs/swagger';
 import { User } from '../schemas/user.schema';
+import { RegisterDto } from '../dto/register.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -56,6 +58,17 @@ export class AuthController {
     };
   }
 
+  @Post('users')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create user (Admin only)' })
+  @ApiBody({ type: RegisterDto })
+  @ApiCreatedResponse({ type: User, description: 'User created successfully' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
+  @UsePipes(new ValidationPipe())
+  async createUser(@Body() registerDto: RegisterDto) {
+    return this.authService.registerUser(registerDto);
+  }
 
   // Admin user management endpoints
   @Get('users')
